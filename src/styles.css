@@ -1,0 +1,26 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Lato, sans-serif;
+}
+
+app-root > mat-drawer-container > mat-drawer-content > main > router-outlet + * {
+  padding: 2rem;
+  display: block;
+  min-height: calc(100vh - 16rem);
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 300;
+}
+
+h1 {
+    font-size: calc(var(--mat-sys-headline-large-size) * 1.25);
+}

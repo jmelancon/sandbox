@@ -1,0 +1,26 @@
+mat-toolbar {
+  background: var(--mat-sys-secondary-container);
+  overflow: visible;
+
+  button {
+    font-size: 16px;
+    color: var(--mat-sys-primary);
+
+    &.active {
+      background: color-mix(in srgb, var(--mat-sys-primary) 10%, transparent);
+    }
+
+    &.mdc-button mat-icon {
+      font-size: 24px;
+    }
+
+    mat-icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    &[matIconButton] {
+      margin-right: 0.5rem;
+    }
+  }
+}

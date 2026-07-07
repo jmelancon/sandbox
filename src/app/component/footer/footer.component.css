@@ -1,0 +1,25 @@
+footer.mat-toolbar {
+  height: 4rem;
+  border-top: solid 1px var(--mat-sys-outline-variant);
+  padding: 2rem;
+  display: flex;
+
+  mat-icon {
+    width: 4rem;
+    height: 4rem;
+    font-size: 4rem;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  a {
+    margin: auto 1rem;
+    color: var(--mat-sys-on-surface-variant);
+    font-family: var(--mat-sys-label-large-font);
+    font-size: 18px;
+
+    &:last-child {
+
+      margin: auto 0 auto auto;
+    }
+  }
+}

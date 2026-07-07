@@ -1,0 +1,15 @@
+<mat-toolbar>
+  <button matIconButton class="menu-button" (click)="menuClick.emit($event)">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <button
+    matButton
+    routerLink="/"
+    routerLinkActive="active"
+    ariaCurrentWhenActive="page"
+    [routerLinkActiveOptions]="{exact: true}"
+  >
+    <mat-icon>developer_board</mat-icon>
+    <span>sandbox</span>
+  </button>
+</mat-toolbar>
