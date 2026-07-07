@@ -3,7 +3,7 @@ import {MatListItem, MatNavList} from '@angular/material/list';
 import {IsActiveMatchOptions, RouterLink, RouterLinkActive} from '@angular/router';
 import {MatIcon} from '@angular/material/icon';
 
-type RouteLink = {
+interface RouteLink {
   name: string,
   path: string,
   icon: string,

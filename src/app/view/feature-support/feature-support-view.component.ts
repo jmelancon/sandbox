@@ -1,4 +1,4 @@
-import {Component, computed, Signal} from '@angular/core';
+import {Component, computed, input, Signal} from '@angular/core';
 import {
     MatCell,
     MatCellDef,
@@ -9,7 +9,7 @@ import {
     MatTable
 } from '@angular/material/table';
 
-type Feature = {
+interface Feature {
     name: string,
     documentation: string,
     available: boolean,
@@ -59,7 +59,15 @@ type Feature = {
     `
 })
 export class FeatureSupportViewComponent {
-    protected features: Signal<Feature[]> = computed(() => [])
+    public webUsbSupported: Signal<boolean> = input.required();
+
+    protected features: Signal<Feature[]> = computed(() => [
+        {
+            name: "WebUSB",
+            documentation: "https://developer.mozilla.org/en-US/docs/Web/API/WebUSB_API",
+            available: this.webUsbSupported()
+        }
+    ])
 
     protected getDomainName(url: string){
         return new URL(url).host;

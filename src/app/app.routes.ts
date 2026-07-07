@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import {HomeViewComponent} from './view/home/home-view.component';
 import {FeatureSupportViewComponent} from './view/feature-support/feature-support-view.component';
+import { WebUsbSupportedResolver } from './service/resolver/web-usb-supported.resolver';
 
 export const routes: Routes = [
     {
@@ -12,6 +13,9 @@ export const routes: Routes = [
         path: 'features',
         pathMatch: 'full',
         component: FeatureSupportViewComponent,
-        runGuardsAndResolvers: "always"
+        runGuardsAndResolvers: "always",
+        resolve: {
+            webUsbSupported: WebUsbSupportedResolver
+        }
     }
 ];
