@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "sandbox-serverless": {
+    "sandbox": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -54,10 +54,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "sandbox-serverless:build:production"
+              "buildTarget": "sandbox:build:production"
             },
             "development": {
-              "buildTarget": "sandbox-serverless:build:development"
+              "buildTarget": "sandbox:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -95,6 +95,7 @@
   "cli": {
     "schematicCollections": [
       "angular-eslint"
-    ]
+    ],
+    "analytics": false
   }
 }

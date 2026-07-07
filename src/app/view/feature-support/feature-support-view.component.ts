@@ -1,4 +1,4 @@
-import {Component, computed, input, InputSignal, Signal} from '@angular/core';
+import {Component, computed, Signal} from '@angular/core';
 import {
     MatCell,
     MatCellDef,
@@ -59,8 +59,6 @@ type Feature = {
     `
 })
 export class FeatureSupportViewComponent {
-    public languageModelAvailability: InputSignal<Availability|null> = input.required();
-
     protected features: Signal<Feature[]> = computed(() => [])
 
     protected getDomainName(url: string){
