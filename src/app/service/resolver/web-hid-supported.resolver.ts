@@ -4,8 +4,8 @@ import { Resolve } from '@angular/router';
 @Injectable({
     providedIn: 'root'
 })
-export class WebUsbSupportedResolver implements Resolve<boolean> {
+export class WebHidSupportedResolver implements Resolve<boolean> {
     resolve(): boolean {
-        return 'usb' in window.navigator;
+        return 'hid' in window.navigator;
     }
 }

@@ -1,4 +1,4 @@
-import {Component, computed, input, Signal} from '@angular/core';
+import { Component, Signal, computed, input } from '@angular/core';
 import {
     MatCell,
     MatCellDef,
@@ -17,7 +17,7 @@ interface Feature {
 }
 
 @Component({
-    selector: "<app-feature-support>",
+    selector: '<app-feature-support>',
     imports: [
         MatTable,
         MatHeaderCell,
@@ -42,34 +42,61 @@ interface Feature {
             <ng-container matColumnDef="documentation">
                 <th mat-header-cell *matHeaderCellDef>Documentation</th>
                 <td mat-cell *matCellDef="let feature">
-                    <a [href]="feature.documentation">{{ getDomainName(feature.documentation) }}</a>
+                    <a [href]="feature.documentation">
+                        {{ getDomainName(feature.documentation) }}
+                    </a>
                 </td>
             </ng-container>
             <ng-container matColumnDef="available">
                 <th mat-header-cell *matHeaderCellDef>Available</th>
-                <td mat-cell *matCellDef="let feature">{{ feature.available ? "Yes" : "No" }}</td>
+                <td mat-cell *matCellDef="let feature">
+                    {{ feature.available ? "Yes" : "No" }}
+                </td>
             </ng-container>
             <ng-container matColumnDef="status">
                 <th mat-header-cell *matHeaderCellDef>Status</th>
-                <td mat-cell *matCellDef="let feature">{{ feature.status ?? "N/A" }}</td>
+                <td mat-cell *matCellDef="let feature">
+                    {{ feature.status ?? "N/A" }}
+                </td>
             </ng-container>
-            <tr mat-header-row *matHeaderRowDef="['name', 'documentation', 'available', 'status']"></tr>
-            <tr mat-row *matRowDef="let feature; columns: ['name', 'documentation', 'available', 'status']"></tr>
+            <tr
+                mat-header-row
+                *matHeaderRowDef="
+                    ['name', 'documentation', 'available', 'status']
+                "
+            ></tr>
+            <tr
+                mat-row
+                *matRowDef="
+                    let feature; columns: [
+                        'name',
+                        'documentation',
+                        'available',
+                        'status'
+                    ]
+                "
+            ></tr>
         </mat-table>
     `
 })
 export class FeatureSupportViewComponent {
     public webUsbSupported: Signal<boolean> = input.required();
+    public webHidSupported: Signal<boolean> = input.required();
 
     protected features: Signal<Feature[]> = computed(() => [
         {
-            name: "WebUSB",
-            documentation: "https://developer.mozilla.org/en-US/docs/Web/API/WebUSB_API",
+            name: 'WebUSB',
+            documentation: 'https://developer.mozilla.org/en-US/docs/Web/API/WebUSB_API',
             available: this.webUsbSupported()
+        },
+        {
+            name: 'WebHID',
+            documentation: 'https://developer.mozilla.org/en-US/docs/Web/API/WebHID_API',
+            available: this.webHidSupported()
         }
-    ])
+    ]);
 
-    protected getDomainName(url: string){
+    protected getDomainName(url: string) {
         return new URL(url).host;
     }
 }

@@ -5,17 +5,17 @@ import {MatButton, MatIconButton} from '@angular/material/button';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 
 @Component({
-  selector: "<app-header>",
-  imports: [
-    MatToolbar,
-    MatIcon,
-    MatButton,
-    RouterLink,
-    RouterLinkActive,
-    MatIconButton
-  ],
-  templateUrl: "header.component.html",
-  styleUrl: 'header.component.css',
+    selector: '<app-header>',
+    imports: [
+        MatToolbar,
+        MatIcon,
+        MatButton,
+        RouterLink,
+        RouterLinkActive,
+        MatIconButton
+    ],
+    templateUrl: 'header.component.html',
+    styleUrl: 'header.component.css',
 })
 export class HeaderComponent {
     public readonly menuClick = output<MouseEvent>();

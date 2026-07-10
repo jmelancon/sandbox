@@ -1,0 +1,10 @@
+{
+    "eslint.format.enable": true,
+    "eslint.codeActionsOnSave.mode": "all",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "always"
+    },
+    "editor.rulers": [
+        80
+    ]
+}
