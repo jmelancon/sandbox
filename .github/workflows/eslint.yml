@@ -28,13 +28,11 @@ jobs:
             - name: Run ESLint
               env:
                   SARIF_ESLINT_IGNORE_SUPPRESSED: "true"
-              run: npm run lint -- \
-                  --format @microsoft/eslint-formatter-sarif \
-                  --output-file results.sarif
+              run: npm run lint -- --format @microsoft/eslint-formatter-sarif --output-file results.sarif
               continue-on-error: true
 
             - name: Upload Results
-              uses: github/codeql-action/upload-sarif@v3
+              uses: github/codeql-action/upload-sarif@v4
               with:
                   sarif_file: results.sarif
                   wait-for-processing: true
