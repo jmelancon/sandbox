@@ -1,9 +1,16 @@
 import { Routes } from '@angular/router';
-import { HomeViewComponent } from './view/home/home-view.component';
-import { FeatureSupportViewComponent } from './view/feature-support/feature-support-view.component';
-import { WebUsbSupportedResolver } from './service/resolver/web-usb-supported.resolver';
+import {
+    WebHidSupportedResolver
+} from './service/resolver/web-hid-supported.resolver';
+import {
+    WebUsbSupportedResolver
+} from './service/resolver/web-usb-supported.resolver';
+import {
+    FeatureSupportViewComponent
+} from './view/feature-support/feature-support-view.component';
 import { FlircViewComponent } from './view/flirc/flirc-view.component';
-import { WebHidSupportedResolver } from './service/resolver/web-hid-supported.resolver';
+import { HexViewComponent } from './view/hex/hex-view.component';
+import { HomeViewComponent } from './view/home/home-view.component';
 
 export const routes: Routes = [
     {
@@ -15,7 +22,7 @@ export const routes: Routes = [
         path: 'features',
         pathMatch: 'full',
         component: FeatureSupportViewComponent,
-        runGuardsAndResolvers: "always",
+        runGuardsAndResolvers: 'always',
         resolve: {
             webUsbSupported: WebUsbSupportedResolver,
             webHidSupportedResolver: WebHidSupportedResolver
@@ -28,5 +35,10 @@ export const routes: Routes = [
         resolve: {
             webHidSupported: WebHidSupportedResolver
         }
+    },
+    {
+        path: 'hex',
+        pathMatch: 'full',
+        component: HexViewComponent
     }
 ];

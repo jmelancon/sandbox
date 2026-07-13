@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
 import { MatListItem, MatNavList } from '@angular/material/list';
 import {
     IsActiveMatchOptions,
     RouterLink,
     RouterLinkActive
 } from '@angular/router';
-import { MatIcon } from '@angular/material/icon';
 
 interface RouteLink {
     name: string,
@@ -68,6 +68,11 @@ export class SidebarComponent {
             name: 'Flirc Skip 1S',
             icon: 'remote_gen',
             path: '/flirc'
+        },
+        {
+            name: 'Hex Display Demo',
+            icon: 'hive',
+            path: '/hex'
         }
     ];
 }

@@ -1,0 +1,34 @@
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            @for (i of [].constructor(16); track $index) {
+                <th scope="col">
+                    <pre>0{{$index.toString(16).toUpperCase() }}</pre>
+                </th>
+            }
+            <th><pre>UTF-8</pre></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (chunk of chunks(); track $index; let chunkNumber = $index) {
+            <tr>
+                <th scope="row">
+                    <pre>{{$index.toString(16).toUpperCase().padStart(3, '0')}}0</pre>
+                </th>
+                @for (value of chunk; track $index) {
+                    <td>
+                        <pre>{{value.toString(16).toUpperCase().padStart(2, '0')}}</pre>
+                    </td>
+                }
+                <td>
+                    <div class="flex">
+                        @for (value of chunk; track $index) {
+                            <pre>{{asCharacter(value)}}</pre>
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,11 +1,52 @@
-import { Component, Signal, WritableSignal, computed, inject, input, signal } from '@angular/core';
+import {
+    Component,
+    Signal,
+    WritableSignal,
+    computed,
+    inject,
+    input,
+    signal
+} from '@angular/core';
 import { MatButton } from '@angular/material/button';
-import { Observable, debounceTime, first, scan } from 'rxjs';
-import { PayloadDecoderService } from '../../service/flirc/payload-decoder.service';
-import { VersionModel } from '../../model/flirc/version.model';
-import { DeviceConnectionService } from '../../service/flirc/device-connection.service';
+import { HexComponent } from '../../component/hex/hex.component';
+import {
+    DeviceConnectionService
+} from '../../service/flirc/device-connection.service';
+import { DeviceIoService } from '../../service/flirc/device-io.service';
 
-const GET_VERSION_COMMAND = [0x0a, 0xa1, 0x67, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0xa0];
+/*
+
+const GET_VERSION_COMMAND = [
+    0x0a, 0xa1, 0x67, 0x76, 0x65, 0x72, 0x73, 0x69,
+    0x6f, 0x6e, 0xa0
+];
+
+const SET_RING_COMMAND_1 = [
+    0x32, 0xa1, 0x63, 0x6c, 0x65, 0x64, 0xa3, 0x68,
+    0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79,
+    0x18, 0x5a, 0x6c, 0x61, 0x63, 0x74, 0x69, 0x76,
+    0x69, 0x74, 0x79, 0x2d, 0x6d, 0x61, 0x78, 0x00,
+    0x70, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74,
+    0x79, 0x2d, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75,
+    0x74, 0x18, 0x1e
+];
+
+const SET_RING_COMMAND_2 = [
+    0x38, 0xa1, 0x63, 0x6c, 0x65, 0x64, 0xa4, 0x64,
+    0x72, 0x69, 0x6e, 0x67, 0x83, 0x18, 0xff, 0x00,
+    0x18, 0xff, 0x68, 0x72, 0x69, 0x6e, 0x67, 0x2d,
+    0x6d, 0x61, 0x78, 0x00, 0x69, 0x61, 0x6e, 0x69,
+    0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x64, 0x67,
+    0x6c, 0x6f, 0x77, 0x6c, 0x72, 0x69, 0x6e, 0x67,
+    0x2d, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74,
+    0x0
+];
+
+*/
+
+const GET_GPIO_COMMAND = [
+    0x07, 0xa1, 0x64, 0x67, 0x70, 0x69, 0x6f, 0xa0
+];
 
 @Component({
     selector: '<app-flirc-view>',
@@ -22,7 +63,7 @@ const GET_VERSION_COMMAND = [0x0a, 0xa1, 0x67, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6
         }
         @else if (device && report) {
             <p>Device connected!</p>
-            <pre><code>{{report}}</code></pre>
+            <app-hex [body]='report'/>
         } @else if(device) {
             <p>Device connected, awaiting report...</p>
         } @else {
@@ -33,14 +74,11 @@ const GET_VERSION_COMMAND = [0x0a, 0xa1, 0x67, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6
             <button matButton (click)="connect()">Connect</button>
         }
     `,
-    imports: [MatButton]
+    imports: [MatButton, HexComponent]
 })
 export class FlircViewComponent {
     public readonly webHidSupported: Signal<boolean>
         = input.required();
-
-    private readonly payloadLexer: PayloadDecoderService
-        = inject(PayloadDecoderService);
 
     private readonly deviceConnection: DeviceConnectionService
         = inject(DeviceConnectionService);
@@ -48,64 +86,17 @@ export class FlircViewComponent {
     protected readonly deviceSignal: Signal<HIDDevice|undefined>
         = computed(() => this.deviceConnection.device());
 
-    protected readonly deviceReportSignal: WritableSignal<string|undefined>
-        = signal(undefined);
+    protected readonly deviceReportSignal: WritableSignal<ArrayLike<number>>
+        = signal([]);
+
+    protected readonly deviceIoService: DeviceIoService
+        = inject(DeviceIoService);
 
     protected async connect(): Promise<void> {
-        const device = await this.deviceConnection.connect();
+        await this.deviceConnection.connect();
 
-        const buf = new ArrayBuffer(64);
-        const view = new Uint8Array(buf);
-        view.fill(0xff);
-        view.set(GET_VERSION_COMMAND);
-
-        const collect = new Observable<HIDInputReportEvent>((subscriber) => {
-            device.addEventListener('inputreport', (event) => {
-                subscriber.next(event);
-            });
+        this.deviceIoService.issueRawRequest(GET_GPIO_COMMAND).then((v) => {
+            this.deviceReportSignal.set(v);
         });
-
-        const accumulator = function (
-            acc: Uint8Array<ArrayBuffer> | undefined,
-            curr: HIDInputReportEvent
-        ) {
-            if (acc === undefined)
-                return;
-
-            console.log('bruh');
-
-            const lastLength = acc.byteLength;
-            const payloadLength = curr.data.byteLength - 1;
-            const payload = new Uint8Array(curr.data.buffer.slice(1));
-
-            // Increase buffer sized, append new data
-            acc.buffer.resize(lastLength + payloadLength);
-            acc.set(payload, lastLength);
-            return acc;
-        };
-
-        const response = collect.pipe(
-            scan(
-                accumulator,
-                new Uint8Array(
-                    new ArrayBuffer(0, { maxByteLength: 4096 })
-                )
-            ),
-            debounceTime(100),
-            first()
-        );
-        response.subscribe((data) => {
-            this.deviceReportSignal.set(undefined);
-            if (data) {
-                const decoder = new TextDecoder();
-                const decoded = decoder.decode(
-                    data.buffer.transferToFixedLength()
-                );
-                this.deviceReportSignal.set(decoded);
-                console.log(VersionModel.FromObject(this.payloadLexer.parse(decoded.slice(3, decoded.length - 60))));
-            }
-        });
-
-        device.sendReport(0x02, buf);
     }
 }

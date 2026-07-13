@@ -1,0 +1,25 @@
+th {
+    user-select: none;
+    text-align: left;
+}
+
+pre {
+    margin: 0;
+}
+
+th,
+td {
+
+    &:nth-child(10),
+    &:nth-child(18) {
+
+        >pre,
+        >div {
+            margin-left: 2rem;
+        }
+    }
+}
+
+.flex {
+    display: flex;
+}

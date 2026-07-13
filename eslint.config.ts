@@ -1,9 +1,9 @@
 // @ts-check
 import eslint from '@eslint/js';
+import stylistic from '@stylistic/eslint-plugin';
+import angular from 'angular-eslint';
 import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
-import angular from 'angular-eslint';
-import stylistic from '@stylistic/eslint-plugin';
 
 module.exports = defineConfig([
     {
@@ -63,9 +63,7 @@ module.exports = defineConfig([
                     before: true,
                     after: true
                 }
-            ],
-            '@stylistic/semi': ['warn', 'always'],
-            'sort-imports': ['warn'],
+            ]
         },
     },
     {
